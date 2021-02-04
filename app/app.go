@@ -1,11 +1,13 @@
 package app
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/dapi-co/dapi-go/auth"
 	"github.com/dapi-co/dapi-go/config"
 	"github.com/dapi-co/dapi-go/data"
+	"github.com/dapi-co/dapi-go/handler"
 	"github.com/dapi-co/dapi-go/payment"
 	"github.com/dapi-co/dapi-go/response"
 )
@@ -91,4 +93,8 @@ func (app *DapiApp) CreateTransfer(
 ) (*response.TransferResponse, error) {
 	p := payment.Payment{Config: &app.config}
 	return p.CreateTransfer(accessToken, userSecret, transfer, userInputs, operationID)
+}
+
+func (app *DapiApp) HandleDapiRequests(rw http.ResponseWriter, req *http.Request) {
+	handler.HandleDapiRequests(rw, req)
 }

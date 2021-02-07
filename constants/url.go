@@ -1,7 +1,6 @@
 package constants
 
-// TODO: change this to the actual DD URL
-const BaseURL = "http://localhost:8081"
+const BaseURL = "https://dd.cf.dapi.co"
 
 type DapiAction string
 

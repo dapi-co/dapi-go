@@ -101,6 +101,9 @@ func (app *DapiApp) CreateTransfer(
 	)
 }
 
+// HandleDapiRequests is an HTTP handler function, which redirects all requests
+// to Dapi's API, after adding the fields specific to this App to their body.
+// The only required field in the received request is the 'action' field.
 func (app *DapiApp) HandleDapiRequests(rw http.ResponseWriter, req *http.Request) {
 	defer req.Body.Close()
 
@@ -112,7 +115,7 @@ func (app *DapiApp) HandleDapiRequests(rw http.ResponseWriter, req *http.Request
 		return
 	}
 
-	// unmarshal the body to a map, to add the appSecret to it
+	// unmarshal the body to a map
 	bodyMap := make(map[string]interface{})
 	err = json.Unmarshal(body, &bodyMap)
 	if err != nil {
@@ -120,7 +123,15 @@ func (app *DapiApp) HandleDapiRequests(rw http.ResponseWriter, req *http.Request
 		rw.Write([]byte(`{"success":false,"msg":"Bad request","type":"BAD_REQUEST","status":"failed"}`))
 		return
 	}
+
+	// add the fields specific to this app to the body
+	bodyMap["appKey"] = app.config.AppKey
 	bodyMap["appSecret"] = app.config.AppSecret
+	bodyMap["tokenID"] = app.loginData.TokenID
+	bodyMap["userID"] = app.loginData.UserID
+	bodyMap["userSecret"] = app.loginData.UserSecret
+	bodyMap["accessCode"] = app.loginData.AccessCode
+	bodyMap["connectionID"] = app.loginData.ConnectionID
 
 	// marshal the new body back to json
 	body, err = json.Marshal(bodyMap)

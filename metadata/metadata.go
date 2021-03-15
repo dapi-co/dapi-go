@@ -3,10 +3,11 @@ package metadata
 import (
 	"encoding/json"
 
+	"github.com/dapi-co/dapi-go/actions"
 	"github.com/dapi-co/dapi-go/config"
-	"github.com/dapi-co/dapi-go/constants"
 	"github.com/dapi-co/dapi-go/request"
 	"github.com/dapi-co/dapi-go/response"
+	"github.com/dapi-co/dapi-go/types"
 )
 
 // Metadata is the base type that allows talking to the metadata endpoints
@@ -16,35 +17,33 @@ type Metadata struct {
 
 // GetAccountsMetadata talks to the get accounts metadata endpoint
 func (m *Metadata) GetAccountsMetadata(
-	accessToken string,
+	tokenID string,
 	userSecret string,
-	userInputs []response.UserInput,
 	operationID string,
+	userInputs []types.UserInput,
 ) (*response.AccountsMetadataResponse, error) {
 
-	baseRequest := &request.BaseRequest{
-		UserSecret:  userSecret,
+	req := &request.BaseRequest{
+		AppKey:      m.Config.AppKey,
 		AppSecret:   m.Config.AppSecret,
-		UserInputs:  userInputs,
+		TokenID:     tokenID,
+		UserID:      "",
+		UserSecret:  userSecret,
 		OperationID: operationID,
+		UserInputs:  userInputs,
 	}
 
-	jsonData, err := json.Marshal(baseRequest)
+	jsonData, err := json.Marshal(req)
 	if err != nil {
 		return nil, err
 	}
 
-	baseHeader := &request.BaseHeader{
-		AccessToken: accessToken,
-	}
-
-	body, err := request.DapiRequest(jsonData, constants.GetAccountsMetadata, baseHeader)
+	body, err := request.DapiRequest(jsonData, actions.GetAccountsMetadata)
 	if err != nil {
 		return nil, err
 	}
 
 	res := response.AccountsMetadataResponse{}
-
 	err = json.Unmarshal(body, &res)
 	if err != nil {
 		return nil, err

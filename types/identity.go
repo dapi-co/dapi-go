@@ -1,4 +1,4 @@
-package response
+package types
 
 type Identity struct {
 	Nationality    string           `json:"nationality,omitempty"`
@@ -6,6 +6,6 @@ type Identity struct {
 	Numbers        []PhoneNumber    `json:"numbers,omitempty"`
 	EmailAddress   string           `json:"emailAddress,omitempty"`
 	Name           string           `json:"name,omitempty"`
-	Address        Address          `json:"address,omitempty"`
+	Address        IdentityAddress  `json:"address,omitempty"`
 	Identification []Identification `json:"identification,omitempty"`
 }

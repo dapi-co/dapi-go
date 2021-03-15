@@ -1,4 +1,4 @@
-package response
+package types
 
 type Currency struct {
 	Code string `json:"code,omitempty"`

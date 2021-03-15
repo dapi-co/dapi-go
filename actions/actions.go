@@ -1,6 +1,4 @@
-package constants
-
-const BaseURL = "https://dd.cf.dapi.co"
+package actions
 
 type DapiAction string
 
@@ -13,6 +11,4 @@ const (
 	CreateTransfer      DapiAction = "/payment/transfer/autoflow"
 	GetBeneficiaries    DapiAction = "/payment/beneficiaries/get"
 	GetAccountsMetadata DapiAction = "/metadata/accounts/get"
-	DelinkUser          DapiAction = "/users/delinkuser"
-	OperationStatus     DapiAction = "/operation/status"
 )

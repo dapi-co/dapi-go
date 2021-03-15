@@ -1,4 +1,4 @@
-package response
+package types
 
 import (
 	"errors"
@@ -72,7 +72,7 @@ type Range struct {
 	Unit  string `json:"unit,omitempty"`
 }
 
-type GetAccountsMetadata struct {
+type AccountsMetadata struct {
 	SwiftCode                                          string             `json:"swiftCode,omitempty"`
 	SortCode                                           string             `json:"sortCode,omitempty"`
 	BankName                                           string             `json:"bankName,omitempty"`

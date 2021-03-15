@@ -6,73 +6,27 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/dapi-co/dapi-go/constants"
-	"github.com/dapi-co/dapi-go/response"
+	"github.com/dapi-co/dapi-go/actions"
+	"github.com/dapi-co/dapi-go/types"
 )
+
+const BaseURL = "https://dd.dapi.co"
 
 // BaseRequest holds the fields that's needed by all endpoints
 type BaseRequest struct {
-	UserSecret  string               `json:"userSecret"`
-	AppSecret   string               `json:"appSecret"`
-	UserInputs  []response.UserInput `json:"userInputs,omitempty"`
-	OperationID string               `json:"operationID,omitempty"`
-}
-
-// ExchangeTokenRequest holds the fields that's needed by the Auth's
-// exchange token endpoint.
-type ExchangeTokenRequest struct {
-	AppSecret    string `json:"appSecret"`
-	AccessCode   string `json:"accessCode"`
-	ConnectionID string `json:"connectionID"`
-}
-
-// BalanceRequest holds the fields that's needed by the Data's
-// get balance endpoint.
-type BalanceRequest struct {
-	BaseRequest
-	AccountID string `json:"accountID"`
-}
-
-// TransactionsRequest holds the fields that's needed by the Data's
-// get transactions endpoint.
-type TransactionsRequest struct {
-	BaseRequest
-	AccountID string `json:"accountID"`
-	FromDate  string `json:"fromDate"`
-	ToDate    string `json:"toDate"`
-}
-
-// TransferRequest holds the fields that's needed by the Payment's
-// create transfer endpoint.
-type TransferRequest struct {
-	BaseRequest
-	SenderID      string  `json:"senderID"`
-	ReceiverID    string  `json:"receiverID,omitempty"`
-	Amount        float64 `json:"amount"`
-	Remark        string  `json:"remark,omitempty"`
-	Iban          string  `json:"iban,omitempty"`
-	AccountNumber string  `json:"accountNumber,omitempty"`
-	Name          string  `json:"name,omitempty"`
-}
-
-// BeneficiaryRequest holds the fields that's needed by the Payment's
-// create beneficiaries endpoint.
-type BeneficiaryRequest struct {
-	BaseRequest
-	BeneficiaryInfo
-}
-
-type NoHeader struct{}
-
-// BaseHeader holds any fields that's needed in the header of the request
-type BaseHeader struct {
-	AccessToken string
+	AppKey      string            `json:"appKey,omitempty"`
+	AppSecret   string            `json:"appSecret,omitempty"`
+	TokenID     string            `json:"tokenID,omitempty"`
+	UserID      string            `json:"userID,omitempty"`
+	UserSecret  string            `json:"userSecret,omitempty"`
+	OperationID string            `json:"operationID,omitempty"`
+	UserInputs  []types.UserInput `json:"userInputs,omitempty"`
 }
 
 // DapiRequest creates a request to the API, on the product specified by productURL,
 // with the body of the request set as the provided body, and the headers as the
 // provided headers.
-func DapiRequest(body []byte, action constants.DapiAction, headers *BaseHeader) ([]byte, error) {
+func DapiRequest(body []byte, action actions.DapiAction) ([]byte, error) {
 	client := http.Client{}
 
 	// unmarshal the body to a map, to add the action to it
@@ -89,18 +43,14 @@ func DapiRequest(body []byte, action constants.DapiAction, headers *BaseHeader) 
 		return nil, err
 	}
 
-	request, err := http.NewRequest("POST", constants.BaseURL, bytes.NewBuffer(body))
+	req, err := http.NewRequest("POST", BaseURL, bytes.NewBuffer(body))
 	if err != nil {
 		return nil, err
 	}
 
-	request.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Content-Type", "application/json")
 
-	if headers != nil {
-		request.Header.Set("Authorization", "Bearer "+headers.AccessToken)
-	}
-
-	resp, err := client.Do(request)
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}

@@ -1,27 +1,25 @@
 package response
 
 import (
-	"github.com/dapi-co/dapi-go/constants"
+	"github.com/dapi-co/dapi-go/types"
 )
 
 type IBaseResponse interface {
-	GetOperationID() string
+	GetStatus() types.ApiStatus
 	GetSuccess() bool
-	GetStatus() constants.ApiStatus
-	GetUserInputs() []UserInput
+	GetOperationID() string
+	GetUserInputs() []types.UserInput
 	GetErrType() string
 	GetErrMsg() string
-	GetCode() int
 }
 
 type BaseResponse struct {
-	OperationID string              `json:"operationID,omitempty"`
-	Success     bool                `json:"success,omitempty"`
-	Status      constants.ApiStatus `json:"status,omitempty"`
-	UserInputs  []UserInput         `json:"userInputs,omitempty"`
-	Type        string              `json:"type,omitempty"`
-	Msg         string              `json:"msg,omitempty"`
-	Code        int                 `json:"code,omitempty"`
+	Status      types.ApiStatus   `json:"status,omitempty"`
+	Success     bool              `json:"success"`
+	OperationID string            `json:"operationID,omitempty"`
+	UserInputs  []types.UserInput `json:"userInputs,omitempty"`
+	Type        string            `json:"type,omitempty"`
+	Msg         string            `json:"msg,omitempty"`
 }
 
 func (br *BaseResponse) GetOperationID() string {
@@ -32,11 +30,11 @@ func (br *BaseResponse) GetSuccess() bool {
 	return br.Success
 }
 
-func (br *BaseResponse) GetStatus() constants.ApiStatus {
+func (br *BaseResponse) GetStatus() types.ApiStatus {
 	return br.Status
 }
 
-func (br *BaseResponse) GetUserInputs() []UserInput {
+func (br *BaseResponse) GetUserInputs() []types.UserInput {
 	return br.UserInputs
 }
 
@@ -48,10 +46,6 @@ func (br *BaseResponse) GetErrMsg() string {
 	return br.Msg
 }
 
-func (br *BaseResponse) GetCode() int {
-	return br.Code
-}
-
 type ExchangeTokenResponse struct {
 	BaseResponse
 	AccessToken string `json:"accessToken,omitempty"`
@@ -59,27 +53,27 @@ type ExchangeTokenResponse struct {
 
 type IdentityResponse struct {
 	BaseResponse
-	Identity Identity `json:"identity,omitempty"`
+	Identity types.Identity `json:"identity,omitempty"`
 }
 
 type AccountsResponse struct {
 	BaseResponse
-	Accounts []Account `json:"accounts,omitempty"`
+	Accounts []types.Account `json:"accounts,omitempty"`
 }
 
 type BalanceResponse struct {
 	BaseResponse
-	Balance Balance `json:"balance,omitempty"`
+	Balance types.Balance `json:"balance,omitempty"`
 }
 
 type TransactionsResponse struct {
 	BaseResponse
-	Transactions []Transaction `json:"transactions,omitempty"`
+	Transactions []types.Transaction `json:"transactions,omitempty"`
 }
 
 type BeneficiariesResponse struct {
 	BaseResponse
-	Beneficiaries []Beneficiary `json:"beneficiaries,omitempty"`
+	Beneficiaries []types.Beneficiary `json:"beneficiaries,omitempty"`
 }
 
 type TransferResponse struct {
@@ -89,5 +83,5 @@ type TransferResponse struct {
 
 type AccountsMetadataResponse struct {
 	BaseResponse
-	AccountsMetadata GetAccountsMetadata `json:"accountsMetadata,omitempty"`
+	AccountsMetadata types.AccountsMetadata `json:"accountsMetadata,omitempty"`
 }

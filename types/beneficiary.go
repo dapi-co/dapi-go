@@ -1,8 +1,9 @@
-package response
+package types
 
 type BeneficiaryType string
 
 const (
+	Own           BeneficiaryType = "own"
 	Same          BeneficiaryType = "same"
 	Local         BeneficiaryType = "local"
 	International BeneficiaryType = "intl"

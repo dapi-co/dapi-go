@@ -1,6 +1,6 @@
-package response
+package types
 
-type Address struct {
+type IdentityAddress struct {
 	Flat     string `json:"flat,omitempty"`
 	Building string `json:"building,omitempty"`
 	Full     string `json:"full,omitempty"`

@@ -1,4 +1,4 @@
-package constants
+package types
 
 // ApiStatus is the status of the responses returned from the API
 type ApiStatus string

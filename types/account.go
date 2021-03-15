@@ -1,4 +1,4 @@
-package response
+package types
 
 type AccountType string
 

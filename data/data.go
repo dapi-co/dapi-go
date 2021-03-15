@@ -4,10 +4,11 @@ import (
 	"encoding/json"
 	"time"
 
+	"github.com/dapi-co/dapi-go/actions"
 	"github.com/dapi-co/dapi-go/config"
-	"github.com/dapi-co/dapi-go/constants"
 	"github.com/dapi-co/dapi-go/request"
 	"github.com/dapi-co/dapi-go/response"
+	"github.com/dapi-co/dapi-go/types"
 )
 
 // Data is the base type that allows talking to the data endpoints
@@ -17,35 +18,34 @@ type Data struct {
 
 // GetIdentity talks to the get identity endpoint
 func (d *Data) GetIdentity(
-	accessToken string,
+	tokenID string,
+	userID string,
 	userSecret string,
-	userInputs []response.UserInput,
 	operationID string,
+	userInputs []types.UserInput,
 ) (*response.IdentityResponse, error) {
 
-	baseRequest := &request.BaseRequest{
-		UserSecret:  userSecret,
+	req := &request.BaseRequest{
+		AppKey:      d.Config.AppKey,
 		AppSecret:   d.Config.AppSecret,
-		UserInputs:  userInputs,
+		TokenID:     tokenID,
+		UserID:      userID,
+		UserSecret:  userSecret,
 		OperationID: operationID,
+		UserInputs:  userInputs,
 	}
 
-	jsonData, err := json.Marshal(baseRequest)
+	jsonData, err := json.Marshal(req)
 	if err != nil {
 		return nil, err
 	}
 
-	baseHeader := &request.BaseHeader{
-		AccessToken: accessToken,
-	}
-
-	body, err := request.DapiRequest(jsonData, constants.GetIdentity, baseHeader)
+	body, err := request.DapiRequest(jsonData, actions.GetIdentity)
 	if err != nil {
 		return nil, err
 	}
 
 	res := response.IdentityResponse{}
-
 	err = json.Unmarshal(body, &res)
 	if err != nil {
 		return nil, err
@@ -56,35 +56,34 @@ func (d *Data) GetIdentity(
 
 // GetAccounts talks to the get accounts endpoint
 func (d *Data) GetAccounts(
-	accessToken string,
+	tokenID string,
+	userID string,
 	userSecret string,
-	userInputs []response.UserInput,
 	operationID string,
+	userInputs []types.UserInput,
 ) (*response.AccountsResponse, error) {
 
-	baseRequest := &request.BaseRequest{
-		UserSecret:  userSecret,
+	req := &request.BaseRequest{
+		AppKey:      d.Config.AppKey,
 		AppSecret:   d.Config.AppSecret,
-		UserInputs:  userInputs,
+		TokenID:     tokenID,
+		UserID:      userID,
+		UserSecret:  userSecret,
 		OperationID: operationID,
+		UserInputs:  userInputs,
 	}
 
-	jsonData, err := json.Marshal(baseRequest)
+	jsonData, err := json.Marshal(req)
 	if err != nil {
 		return nil, err
 	}
 
-	baseHeader := &request.BaseHeader{
-		AccessToken: accessToken,
-	}
-
-	body, err := request.DapiRequest(jsonData, constants.GetAccounts, baseHeader)
+	body, err := request.DapiRequest(jsonData, actions.GetAccounts)
 	if err != nil {
 		return nil, err
 	}
 
 	res := response.AccountsResponse{}
-
 	err = json.Unmarshal(body, &res)
 	if err != nil {
 		return nil, err
@@ -93,41 +92,47 @@ func (d *Data) GetAccounts(
 	return &res, nil
 }
 
+// BalanceRequest holds the fields that's needed by the Data's
+// get balance endpoint.
+type balanceRequest struct {
+	request.BaseRequest
+	AccountID string `json:"accountID"`
+}
+
 // GetBalance talks to the get balance endpoint
 func (d *Data) GetBalance(
-	accessToken string,
+	tokenID string,
+	userID string,
 	userSecret string,
 	accountID string,
-	userInputs []response.UserInput,
 	operationID string,
+	userInputs []types.UserInput,
 ) (*response.BalanceResponse, error) {
 
-	balanceRequest := &request.BalanceRequest{
+	req := &balanceRequest{
 		BaseRequest: request.BaseRequest{
-			UserSecret:  userSecret,
+			AppKey:      d.Config.AppKey,
 			AppSecret:   d.Config.AppSecret,
-			UserInputs:  userInputs,
+			TokenID:     tokenID,
+			UserID:      userID,
+			UserSecret:  userSecret,
 			OperationID: operationID,
+			UserInputs:  userInputs,
 		},
 		AccountID: accountID,
 	}
 
-	jsonData, err := json.Marshal(balanceRequest)
+	jsonData, err := json.Marshal(req)
 	if err != nil {
 		return nil, err
 	}
 
-	baseHeader := &request.BaseHeader{
-		AccessToken: accessToken,
-	}
-
-	body, err := request.DapiRequest(jsonData, constants.GetBalance, baseHeader)
+	body, err := request.DapiRequest(jsonData, actions.GetBalance)
 	if err != nil {
 		return nil, err
 	}
 
 	res := response.BalanceResponse{}
-
 	err = json.Unmarshal(body, &res)
 	if err != nil {
 		return nil, err
@@ -136,47 +141,55 @@ func (d *Data) GetBalance(
 	return &res, nil
 }
 
+// transactionsRequest holds the fields that's needed by the Data's
+// get transactions endpoint.
+type transactionsRequest struct {
+	request.BaseRequest
+	AccountID string `json:"accountID"`
+	FromDate  string `json:"fromDate"`
+	ToDate    string `json:"toDate"`
+}
+
 // GetTransactions talks to the get transactions endpoint
 func (d *Data) GetTransactions(
-	accessToken string,
+	tokenID string,
+	userID string,
 	userSecret string,
 	accountID string,
 	fromDate time.Time,
 	toDate time.Time,
-	userInputs []response.UserInput,
 	operationID string,
+	userInputs []types.UserInput,
 ) (*response.TransactionsResponse, error) {
 
 	dateFormat := "2006-01-02"
 
-	transactionsRequest := &request.TransactionsRequest{
+	req := &transactionsRequest{
 		BaseRequest: request.BaseRequest{
-			UserSecret:  userSecret,
+			AppKey:      d.Config.AppKey,
 			AppSecret:   d.Config.AppSecret,
-			UserInputs:  userInputs,
+			TokenID:     tokenID,
+			UserID:      userID,
+			UserSecret:  userSecret,
 			OperationID: operationID,
+			UserInputs:  userInputs,
 		},
 		AccountID: accountID,
 		FromDate:  fromDate.Format(dateFormat),
 		ToDate:    toDate.Format(dateFormat),
 	}
 
-	jsonData, err := json.Marshal(transactionsRequest)
+	jsonData, err := json.Marshal(req)
 	if err != nil {
 		return nil, err
 	}
 
-	baseHeader := &request.BaseHeader{
-		AccessToken: accessToken,
-	}
-
-	body, err := request.DapiRequest(jsonData, constants.GetTransactions, baseHeader)
+	body, err := request.DapiRequest(jsonData, actions.GetTransactions)
 	if err != nil {
 		return nil, err
 	}
 
 	res := response.TransactionsResponse{}
-
 	err = json.Unmarshal(body, &res)
 	if err != nil {
 		return nil, err

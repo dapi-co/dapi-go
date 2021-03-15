@@ -1,4 +1,4 @@
-package response
+package types
 
 type UserInput struct {
 	ID     string `json:"id,omitempty"`

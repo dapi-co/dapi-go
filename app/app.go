@@ -12,89 +12,93 @@ import (
 	"github.com/dapi-co/dapi-go/data"
 	"github.com/dapi-co/dapi-go/payment"
 	"github.com/dapi-co/dapi-go/response"
+	"github.com/dapi-co/dapi-go/types"
 )
 
 type DapiApp struct {
-	config config.Config
+	config    config.Config
+	loginData LoginData
 }
 
-func NewDapiApp(config config.Config) *DapiApp {
-	return &DapiApp{config: config}
+func NewDapiApp(config config.Config, loginData LoginData) *DapiApp {
+	return &DapiApp{config: config, loginData: loginData}
 }
 
-func (app *DapiApp) ExchangeToken(
-	accessCode string,
-	connectionID string,
-) (*response.ExchangeTokenResponse, error) {
+func (app *DapiApp) ExchangeToken() (*response.ExchangeTokenResponse, error) {
 	a := auth.Auth{Config: &app.config}
-	return a.ExchangeToken(accessCode, connectionID)
+	return a.ExchangeToken(app.loginData.TokenID, app.loginData.AccessCode, app.loginData.ConnectionID)
 }
-
-// TODO: add DelinkUser
 
 func (app *DapiApp) GetIdentity(
-	accessToken string,
-	userSecret string,
-	userInputs []response.UserInput,
 	operationID string,
+	userInputs []types.UserInput,
 ) (*response.IdentityResponse, error) {
 	d := data.Data{Config: &app.config}
-	return d.GetIdentity(accessToken, userSecret, userInputs, operationID)
+	return d.GetIdentity(
+		app.loginData.TokenID, app.loginData.UserID, app.loginData.UserSecret,
+		operationID, userInputs,
+	)
 }
 
 func (app *DapiApp) GetAccounts(
-	accessToken string,
-	userSecret string,
-	userInputs []response.UserInput,
 	operationID string,
+	userInputs []types.UserInput,
 ) (*response.AccountsResponse, error) {
 	d := data.Data{Config: &app.config}
-	return d.GetAccounts(accessToken, userSecret, userInputs, operationID)
+	return d.GetAccounts(
+		app.loginData.TokenID, app.loginData.UserID, app.loginData.UserSecret,
+		operationID, userInputs,
+	)
 }
 
 func (app *DapiApp) GetBalance(
-	accessToken string,
-	userSecret string,
 	accountID string,
-	userInputs []response.UserInput,
 	operationID string,
+	userInputs []types.UserInput,
 ) (*response.BalanceResponse, error) {
 	d := data.Data{Config: &app.config}
-	return d.GetBalance(accessToken, userSecret, accountID, userInputs, operationID)
+	return d.GetBalance(
+		app.loginData.TokenID, app.loginData.UserID, app.loginData.UserSecret,
+		accountID, operationID, userInputs,
+	)
 }
 
 func (app *DapiApp) GetTransactions(
-	accessToken string,
-	userSecret string,
 	accountID string,
 	fromDate time.Time,
 	toDate time.Time,
-	userInputs []response.UserInput,
 	operationID string,
+	userInputs []types.UserInput,
 ) (*response.TransactionsResponse, error) {
 	d := data.Data{Config: &app.config}
-	return d.GetTransactions(accessToken, userSecret, accountID, fromDate, toDate, userInputs, operationID)
+	return d.GetTransactions(
+		app.loginData.TokenID, app.loginData.UserID, app.loginData.UserSecret,
+		accountID, fromDate, toDate, operationID, userInputs,
+	)
 }
 
 func (app *DapiApp) GetBeneficiaries(
-	accessToken string,
-	userSecret string,
-	userInputs []response.UserInput,
 	operationID string,
+	userInputs []types.UserInput,
 ) (*response.BeneficiariesResponse, error) {
 	p := payment.Payment{Config: &app.config}
-	return p.GetBeneficiaries(accessToken, userSecret, userInputs, operationID)
+	return p.GetBeneficiaries(
+		app.loginData.TokenID, app.loginData.UserID, app.loginData.UserSecret,
+		operationID, userInputs,
+	)
 }
 
 func (app *DapiApp) CreateTransfer(
-	accessToken string,
-	userSecret string,
 	transfer payment.Transfer,
-	userInputs []response.UserInput,
+	hlAPIStep string,
 	operationID string,
+	userInputs []types.UserInput,
 ) (*response.TransferResponse, error) {
 	p := payment.Payment{Config: &app.config}
-	return p.CreateTransfer(accessToken, userSecret, transfer, userInputs, operationID)
+	return p.CreateTransfer(
+		app.loginData.TokenID, app.loginData.UserID, app.loginData.UserSecret,
+		transfer, hlAPIStep, operationID, userInputs,
+	)
 }
 
 func (app *DapiApp) HandleDapiRequests(rw http.ResponseWriter, req *http.Request) {

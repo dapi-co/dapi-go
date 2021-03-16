@@ -48,7 +48,6 @@ func (br *BaseResponse) GetErrMsg() string {
 
 type ExchangeTokenResponse struct {
 	BaseResponse
-	AccessToken string `json:"accessToken,omitempty"`
 }
 
 type IdentityResponse struct {

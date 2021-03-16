@@ -53,7 +53,7 @@ type ExchangeTokenResponse struct {
 
 type IdentityResponse struct {
 	BaseResponse
-	Identity types.Identity `json:"identity,omitempty"`
+	Identity *types.Identity `json:"identity,omitempty"`
 }
 
 type AccountsResponse struct {
@@ -63,7 +63,7 @@ type AccountsResponse struct {
 
 type BalanceResponse struct {
 	BaseResponse
-	Balance types.Balance `json:"balance,omitempty"`
+	Balance *types.Balance `json:"balance,omitempty"`
 }
 
 type TransactionsResponse struct {
@@ -78,12 +78,12 @@ type BeneficiariesResponse struct {
 
 type TransferResponse struct {
 	BaseResponse
-	Reference      string      `json:"reference,omitempty"`
-	HLAPIStep      string      `json:"hlAPIStep,omitempty"`
-	CoolDownPeriod types.Range `json:"coolDownPeriod,omitempty"`
+	Reference      string       `json:"reference,omitempty"`
+	HLAPIStep      string       `json:"hlAPIStep,omitempty"`
+	CoolDownPeriod *types.Range `json:"coolDownPeriod,omitempty"`
 }
 
 type AccountsMetadataResponse struct {
 	BaseResponse
-	AccountsMetadata types.AccountsMetadata `json:"accountsMetadata,omitempty"`
+	AccountsMetadata *types.AccountsMetadata `json:"accountsMetadata,omitempty"`
 }

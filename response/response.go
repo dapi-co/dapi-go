@@ -78,7 +78,9 @@ type BeneficiariesResponse struct {
 
 type TransferResponse struct {
 	BaseResponse
-	Reference string `json:"reference,omitempty"`
+	Reference      string      `json:"reference,omitempty"`
+	HLAPIStep      string      `json:"hlAPIStep,omitempty"`
+	CoolDownPeriod types.Range `json:"coolDownPeriod,omitempty"`
 }
 
 type AccountsMetadataResponse struct {

@@ -3,7 +3,6 @@ package app
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"time"
 
@@ -144,7 +143,6 @@ func (app *DapiApp) HandleDapiRequests(rw http.ResponseWriter, req *http.Request
 	// forward the request to be handled
 	resp, err := handleDapiRequest(body, req.Header)
 	if err != nil {
-		log.Printf("an error happened while handling the request. err: %v\n", err)
 		rw.WriteHeader(http.StatusInternalServerError)
 		rw.Write([]byte(`{"success":false,"msg":"Oops! Something happened while performing the request.","type":"UNKNOWN_ERROR","status":"failed"}`))
 		return

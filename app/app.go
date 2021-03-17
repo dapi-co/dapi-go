@@ -17,23 +17,30 @@ import (
 type DapiApp struct {
 	config    config.Config
 	loginData LoginData
+	a         auth.Auth
+	d         data.Data
+	p         payment.Payment
 }
 
 func NewDapiApp(config config.Config, loginData LoginData) *DapiApp {
-	return &DapiApp{config: config, loginData: loginData}
+	return &DapiApp{
+		config:    config,
+		loginData: loginData,
+		a:         auth.Auth{Config: &config},
+		d:         data.Data{Config: &config},
+		p:         payment.Payment{Config: &config},
+	}
 }
 
 func (app *DapiApp) ExchangeToken() (*response.ExchangeTokenResponse, error) {
-	a := auth.Auth{Config: &app.config}
-	return a.ExchangeToken(app.loginData.TokenID, app.loginData.AccessCode, app.loginData.ConnectionID)
+	return app.a.ExchangeToken(app.loginData.TokenID, app.loginData.AccessCode, app.loginData.ConnectionID)
 }
 
 func (app *DapiApp) GetIdentity(
 	operationID string,
 	userInputs []types.UserInput,
 ) (*response.IdentityResponse, error) {
-	d := data.Data{Config: &app.config}
-	return d.GetIdentity(
+	return app.d.GetIdentity(
 		app.loginData.TokenID, app.loginData.UserID, app.loginData.UserSecret,
 		operationID, userInputs,
 	)
@@ -43,8 +50,7 @@ func (app *DapiApp) GetAccounts(
 	operationID string,
 	userInputs []types.UserInput,
 ) (*response.AccountsResponse, error) {
-	d := data.Data{Config: &app.config}
-	return d.GetAccounts(
+	return app.d.GetAccounts(
 		app.loginData.TokenID, app.loginData.UserID, app.loginData.UserSecret,
 		operationID, userInputs,
 	)
@@ -55,8 +61,7 @@ func (app *DapiApp) GetBalance(
 	operationID string,
 	userInputs []types.UserInput,
 ) (*response.BalanceResponse, error) {
-	d := data.Data{Config: &app.config}
-	return d.GetBalance(
+	return app.d.GetBalance(
 		app.loginData.TokenID, app.loginData.UserID, app.loginData.UserSecret,
 		accountID, operationID, userInputs,
 	)
@@ -69,8 +74,7 @@ func (app *DapiApp) GetTransactions(
 	operationID string,
 	userInputs []types.UserInput,
 ) (*response.TransactionsResponse, error) {
-	d := data.Data{Config: &app.config}
-	return d.GetTransactions(
+	return app.d.GetTransactions(
 		app.loginData.TokenID, app.loginData.UserID, app.loginData.UserSecret,
 		accountID, fromDate, toDate, operationID, userInputs,
 	)
@@ -80,8 +84,7 @@ func (app *DapiApp) GetBeneficiaries(
 	operationID string,
 	userInputs []types.UserInput,
 ) (*response.BeneficiariesResponse, error) {
-	p := payment.Payment{Config: &app.config}
-	return p.GetBeneficiaries(
+	return app.p.GetBeneficiaries(
 		app.loginData.TokenID, app.loginData.UserID, app.loginData.UserSecret,
 		operationID, userInputs,
 	)
@@ -93,8 +96,7 @@ func (app *DapiApp) CreateTransfer(
 	operationID string,
 	userInputs []types.UserInput,
 ) (*response.TransferResponse, error) {
-	p := payment.Payment{Config: &app.config}
-	return p.CreateTransfer(
+	return app.p.CreateTransfer(
 		app.loginData.TokenID, app.loginData.UserID, app.loginData.UserSecret,
 		transfer, hlAPIStep, operationID, userInputs,
 	)

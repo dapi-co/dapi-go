@@ -9,6 +9,7 @@ import (
 	"github.com/dapi-co/dapi-go/auth"
 	"github.com/dapi-co/dapi-go/config"
 	"github.com/dapi-co/dapi-go/data"
+	"github.com/dapi-co/dapi-go/metadata"
 	"github.com/dapi-co/dapi-go/payment"
 	"github.com/dapi-co/dapi-go/response"
 	"github.com/dapi-co/dapi-go/types"
@@ -20,6 +21,7 @@ type DapiApp struct {
 	a         auth.Auth
 	d         data.Data
 	p         payment.Payment
+	m         metadata.Metadata
 }
 
 func NewDapiApp(config config.Config, loginData LoginData) *DapiApp {
@@ -29,6 +31,7 @@ func NewDapiApp(config config.Config, loginData LoginData) *DapiApp {
 		a:         auth.Auth{Config: &config},
 		d:         data.Data{Config: &config},
 		p:         payment.Payment{Config: &config},
+		m:         metadata.Metadata{Config: &config},
 	}
 }
 
@@ -99,6 +102,15 @@ func (app *DapiApp) CreateTransfer(
 	return app.p.CreateTransfer(
 		app.loginData.TokenID, app.loginData.UserID, app.loginData.UserSecret,
 		transfer, hlAPIStep, operationID, userInputs,
+	)
+}
+
+func (app *DapiApp) GetAccountsMetadata(
+	operationID string,
+	userInputs []types.UserInput,
+) (*response.AccountsMetadataResponse, error) {
+	return app.m.GetAccountsMetadata(
+		app.loginData.TokenID, app.loginData.UserSecret, operationID, userInputs,
 	)
 }
 

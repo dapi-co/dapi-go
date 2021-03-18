@@ -80,6 +80,7 @@ func (p *Payment) GetBeneficiaries(
 // transfer autoflow endpoint.
 type transferRequest struct {
 	request.BaseRequest
+	BundleID    string          `json:"bundleID,omitempty"`
 	SenderID    string          `json:"senderID,omitempty"`
 	Amount      float64         `json:"amount,omitempty"`
 	Beneficiary BeneficiaryInfo `json:"beneficiary,omitempty"`
@@ -107,6 +108,7 @@ func (p *Payment) CreateTransfer(
 			OperationID: operationID,
 			UserInputs:  userInputs,
 		},
+		BundleID:    p.Config.BundleID,
 		SenderID:    transfer.SenderID,
 		Amount:      transfer.Amount,
 		Beneficiary: transfer.Beneficiary,

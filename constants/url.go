@@ -1,18 +1,67 @@
 package constants
 
-const BaseURL = "https://dd.cf.dapi.co"
+type dataEndpoints struct {
+	GET_IDENTITY     string
+	GET_ACCOUNTS     string
+	GET_BALANCE      string
+	GET_TRANSACTIONS string
+}
 
-type DapiAction string
+type metadataEndpoints struct {
+	GET_ACCOUNTS string
+}
 
-const (
-	ExchangeToken       DapiAction = "/auth/ExchangeToken"
-	GetIdentity         DapiAction = "/data/identity/get"
-	GetAccounts         DapiAction = "/data/accounts/get"
-	GetBalance          DapiAction = "/data/balance/get"
-	GetTransactions     DapiAction = "/data/transactions/get"
-	CreateTransfer      DapiAction = "/payment/transfer/autoflow"
-	GetBeneficiaries    DapiAction = "/payment/beneficiaries/get"
-	GetAccountsMetadata DapiAction = "/metadata/accounts/get"
-	DelinkUser          DapiAction = "/users/delinkuser"
-	OperationStatus     DapiAction = "/operation/status"
-)
+type paymentEndpoints struct {
+	GET_BENEFICIARIES  string
+	CREATE_BENEFICIARY string
+	CREATE_TRANSFER    string
+	TRANSFER_AUTOFLOW string
+}
+
+type authEndpoints struct {
+	DELINK_USER    string
+	EXCHANGE_TOKEN string
+}
+
+type operationEndpoints struct {
+	OPERATION_STATUS string
+}
+
+type dapiEndpoints struct {
+	BASE_URL       string
+	DATA_URLS      dataEndpoints
+	METADATA_URLS  metadataEndpoints
+	PAYMENT_URLS   paymentEndpoints
+	AUTH_URLS      authEndpoints
+	OPERATION_URLS operationEndpoints
+}
+
+const DD_URL = "https://dd.dapi.co"
+
+// DAPI_URL is the base var that holds all supported API endpoints
+var DAPI_URL = &dapiEndpoints{
+	BASE_URL: "http://localhost:9191/v2",
+	DATA_URLS: dataEndpoints{
+		GET_IDENTITY:     "/data/identity/get",
+		GET_ACCOUNTS:     "/data/accounts/get",
+		GET_BALANCE:      "/data/balance/get",
+		GET_TRANSACTIONS: "/data/transactions/get",
+	},
+	METADATA_URLS: metadataEndpoints{
+		GET_ACCOUNTS: "/metadata/accounts/get",
+	},
+	PAYMENT_URLS: paymentEndpoints{
+		GET_BENEFICIARIES:  "/payment/beneficiaries/get",
+		CREATE_BENEFICIARY: "/payment/beneficiaries/create",
+		CREATE_TRANSFER:    "/payment/transfer/create",
+		TRANSFER_AUTOFLOW:    "/payment/transfer/autoflow",
+	},
+	AUTH_URLS: authEndpoints{
+		DELINK_USER:    "/users/delinkuser",
+		EXCHANGE_TOKEN: "/auth/ExchangeToken",
+	},
+
+	OPERATION_URLS: operationEndpoints{
+		OPERATION_STATUS: "/operation/status",
+	},
+}

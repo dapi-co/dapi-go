@@ -1,20 +1,20 @@
 package main
 
 import (
-	"log"
-	"net/http"
-
 	"github.com/dapi-co/dapi-go/app"
 	"github.com/dapi-co/dapi-go/config"
+	"log"
+	"net/http"
 )
 
 func main() {
 
-	myConfig := config.Config{
-		AppSecret: "MY_APP_SECRET",
+	myApp := &app.DapiApp{
+		Config: &config.Config{
+			AppSecret: "MY_APP_SECRET",
+		},
 	}
-	myApp := app.NewDapiApp(myConfig)
-	err := http.ListenAndServe(":8085", http.HandlerFunc(myApp.HandleDapiRequests))
+	err := http.ListenAndServe(":8085", http.HandlerFunc(myApp.HandleSDKDapiRequests))
 	if err != nil {
 		log.Fatal(err)
 	}

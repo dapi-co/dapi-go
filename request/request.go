@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/dapi-co/dapi-go/constants"
 	"github.com/dapi-co/dapi-go/response"
 )
 
@@ -55,11 +54,21 @@ type TransferRequest struct {
 	Name          string  `json:"name,omitempty"`
 }
 
+// TransferAutoflowRequest holds the fields that's needed by the Payment's
+// transfer autoflow endpoint.
+type TransferAutoflowRequest struct {
+	BaseRequest
+	SenderID      string  `json:"senderID"`
+	Amount        float64 `json:"amount"`
+	Remark        string  `json:"remark,omitempty"`
+	Beneficiary BeneficiaryInfo
+}
+
 // BeneficiaryRequest holds the fields that's needed by the Payment's
 // create beneficiaries endpoint.
 type BeneficiaryRequest struct {
 	BaseRequest
-	BeneficiaryInfo
+	CreateBeneficiaryInfo
 }
 
 type NoHeader struct{}
@@ -72,7 +81,7 @@ type BaseHeader struct {
 // DapiRequest creates a request to the API, on the product specified by productURL,
 // with the body of the request set as the provided body, and the headers as the
 // provided headers.
-func DapiRequest(body []byte, action constants.DapiAction, headers *BaseHeader) ([]byte, error) {
+func DapiRequest(body []byte, url string, header http.Header) ([]byte, error) {
 	client := http.Client{}
 
 	// unmarshal the body to a map, to add the action to it
@@ -81,7 +90,6 @@ func DapiRequest(body []byte, action constants.DapiAction, headers *BaseHeader) 
 	if err != nil {
 		return nil, err
 	}
-	bodyMap["action"] = action
 
 	// marshal the new body back to json
 	body, err = json.Marshal(bodyMap)
@@ -89,16 +97,15 @@ func DapiRequest(body []byte, action constants.DapiAction, headers *BaseHeader) 
 		return nil, err
 	}
 
-	request, err := http.NewRequest("POST", constants.BaseURL, bytes.NewBuffer(body))
+	request, err := http.NewRequest("POST", url, bytes.NewBuffer(body))
+
 	if err != nil {
 		return nil, err
 	}
 
-	request.Header.Set("Content-Type", "application/json")
+	request.Header = header
 
-	if headers != nil {
-		request.Header.Set("Authorization", "Bearer "+headers.AccessToken)
-	}
+	request.Header.Set("Content-Type", "application/json")
 
 	resp, err := client.Do(request)
 	if err != nil {
@@ -113,4 +120,11 @@ func DapiRequest(body []byte, action constants.DapiAction, headers *BaseHeader) 
 	}
 
 	return respBody, nil
+}
+
+func GetHTTPHeader(header *BaseHeader)http.Header{
+	var httpHeader http.Header
+	httpHeader.Add("Authorization", header.AccessToken)
+
+	return httpHeader
 }

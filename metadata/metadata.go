@@ -38,7 +38,7 @@ func (m *Metadata) GetAccountsMetadata(
 		AccessToken: accessToken,
 	}
 
-	body, err := request.DapiRequest(jsonData, constants.GetAccountsMetadata, baseHeader)
+	body, err := request.DapiRequest(jsonData, constants.DAPI_URL.METADATA_URLS.GET_ACCOUNTS, request.GetHTTPHeader(baseHeader))
 	if err != nil {
 		return nil, err
 	}

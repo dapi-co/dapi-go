@@ -39,7 +39,8 @@ func (d *Data) GetIdentity(
 		AccessToken: accessToken,
 	}
 
-	body, err := request.DapiRequest(jsonData, constants.GetIdentity, baseHeader)
+	body, err := request.DapiRequest(jsonData, constants.DAPI_URL.DATA_URLS.GET_IDENTITY, request.GetHTTPHeader(baseHeader))
+
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +79,7 @@ func (d *Data) GetAccounts(
 		AccessToken: accessToken,
 	}
 
-	body, err := request.DapiRequest(jsonData, constants.GetAccounts, baseHeader)
+	body, err := request.DapiRequest(jsonData, constants.DAPI_URL.DATA_URLS.GET_ACCOUNTS, request.GetHTTPHeader(baseHeader))
 	if err != nil {
 		return nil, err
 	}
@@ -121,7 +122,7 @@ func (d *Data) GetBalance(
 		AccessToken: accessToken,
 	}
 
-	body, err := request.DapiRequest(jsonData, constants.GetBalance, baseHeader)
+	body, err := request.DapiRequest(jsonData, constants.DAPI_URL.DATA_URLS.GET_BALANCE, request.GetHTTPHeader(baseHeader))
 	if err != nil {
 		return nil, err
 	}
@@ -170,7 +171,7 @@ func (d *Data) GetTransactions(
 		AccessToken: accessToken,
 	}
 
-	body, err := request.DapiRequest(jsonData, constants.GetTransactions, baseHeader)
+	body, err := request.DapiRequest(jsonData, constants.DAPI_URL.DATA_URLS.GET_TRANSACTIONS, request.GetHTTPHeader(baseHeader))
 	if err != nil {
 		return nil, err
 	}

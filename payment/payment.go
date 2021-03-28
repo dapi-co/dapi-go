@@ -121,3 +121,92 @@ func (p *Payment) CreateTransfer(
 
 	return &res, nil
 }
+
+// CreateBeneficiary talks to the create beneficiaries endpoint
+func (p *Payment) CreateBeneficiary(
+	accessToken string,
+	userSecret string,
+	beneficiary request.CreateBeneficiaryInfo,
+	userInputs []response.UserInput,
+	operationID string,
+) (*response.BaseResponse, error) {
+
+	baseRequest := &request.BeneficiaryRequest{
+		BaseRequest: request.BaseRequest{
+			UserSecret:  userSecret,
+			AppSecret:   p.Config.AppSecret,
+			UserInputs:  userInputs,
+			OperationID: operationID,
+		},
+		CreateBeneficiaryInfo: beneficiary,
+	}
+
+	jsonData, err := json.Marshal(baseRequest)
+	if err != nil {
+		return nil, err
+	}
+
+	baseHeader := &request.BaseHeader{
+		AccessToken: accessToken,
+	}
+
+	body, err := request.DapiRequest(jsonData, constants.DAPI_URL.PAYMENT_URLS.CREATE_BENEFICIARY, request.GetHTTPHeader(baseHeader))
+	if err != nil {
+		return nil, err
+	}
+
+	res := response.BaseResponse{}
+
+	err = json.Unmarshal(body, &res)
+	if err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+
+// TransferAutoflow talks to the transfer autoflow endpoint
+func (p *Payment) TransferAutoflow(
+	accessToken string,
+	userSecret string,
+	transfer TransferAutoflow,
+	userInputs []response.UserInput,
+	operationID string,
+) (*response.TransferResponse, error) {
+
+	baseRequest := &request.TransferAutoflowRequest{
+		BaseRequest: request.BaseRequest{
+			UserSecret:  userSecret,
+			AppSecret:   p.Config.AppSecret,
+			UserInputs:  userInputs,
+			OperationID: operationID,
+		},
+		SenderID:      transfer.SenderID,
+		Amount:        transfer.Amount,
+		Beneficiary: transfer.Beneficiary,
+	}
+
+	jsonData, err := json.Marshal(baseRequest)
+	if err != nil {
+		return nil, err
+	}
+
+	baseHeader := &request.BaseHeader{
+		AccessToken: accessToken,
+	}
+
+	body, err := request.DapiRequest(jsonData, constants.DAPI_URL.PAYMENT_URLS.TRANSFER_AUTOFLOW, request.GetHTTPHeader(baseHeader))
+	if err != nil {
+		return nil, err
+	}
+
+	res := response.TransferResponse{}
+
+	err = json.Unmarshal(body, &res)
+	if err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}

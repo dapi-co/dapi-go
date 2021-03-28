@@ -14,14 +14,25 @@ type Payment struct {
 	Config *config.Config
 }
 
-// Transfer represents the transfer to be created
-type Transfer struct {
-	SenderID      string
+// CreateTransfer represents the transfer to be created
+type CreateTransfer struct {
+	Transfer
 	ReceiverID    string
 	AccountNumber string
 	Name          string
 	Iban          string
+}
+
+// Transfer represents the transfer to be created
+type Transfer struct {
+	SenderID      string
 	Amount        float64
+}
+
+// TransferAutoflow represents the transfer to be created
+type TransferAutoflow struct {
+	Transfer
+	Beneficiary request.BeneficiaryInfo
 }
 
 // GetBeneficiaries talks to the get beneficiaries endpoint

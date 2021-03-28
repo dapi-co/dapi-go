@@ -48,7 +48,7 @@ func (p *Payment) GetBeneficiaries(
 		AccessToken: accessToken,
 	}
 
-	body, err := request.DapiRequest(jsonData, constants.GetBeneficiaries, baseHeader)
+	body, err := request.DapiRequest(jsonData, constants.DAPI_URL.PAYMENT_URLS.GET_BENEFICIARIES, request.GetHTTPHeader(baseHeader))
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +67,7 @@ func (p *Payment) GetBeneficiaries(
 func (p *Payment) CreateTransfer(
 	accessToken string,
 	userSecret string,
-	transfer Transfer,
+	transfer CreateTransfer,
 	userInputs []response.UserInput,
 	operationID string,
 ) (*response.TransferResponse, error) {
@@ -96,7 +96,7 @@ func (p *Payment) CreateTransfer(
 		AccessToken: accessToken,
 	}
 
-	body, err := request.DapiRequest(jsonData, constants.CreateTransfer, baseHeader)
+	body, err := request.DapiRequest(jsonData, constants.DAPI_URL.PAYMENT_URLS.CREATE_TRANSFER, request.GetHTTPHeader(baseHeader))
 	if err != nil {
 		return nil, err
 	}

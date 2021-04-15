@@ -63,6 +63,7 @@ type TransferAutoflowRequest struct {
 	Amount      float64 `json:"amount"`
 	Remark      string  `json:"remark,omitempty"`
 	Beneficiary BeneficiaryInfo
+	BankID      string `json:"bankID"`
 }
 
 // BeneficiaryRequest holds the fields that's needed by the Payment's

@@ -25,14 +25,15 @@ type CreateTransfer struct {
 
 // Transfer represents the transfer to be created
 type Transfer struct {
-	SenderID      string
-	Amount        float64
+	SenderID string
+	Amount   float64
 }
 
 // TransferAutoflow represents the transfer to be created
 type TransferAutoflow struct {
 	Transfer
 	Beneficiary request.BeneficiaryInfo
+	BankID      string
 }
 
 // GetBeneficiaries talks to the get beneficiaries endpoint
@@ -165,7 +166,6 @@ func (p *Payment) CreateBeneficiary(
 	return &res, nil
 }
 
-
 // TransferAutoflow talks to the transfer autoflow endpoint
 func (p *Payment) TransferAutoflow(
 	accessToken string,
@@ -182,9 +182,10 @@ func (p *Payment) TransferAutoflow(
 			UserInputs:  userInputs,
 			OperationID: operationID,
 		},
-		SenderID:      transfer.SenderID,
-		Amount:        transfer.Amount,
+		SenderID:    transfer.SenderID,
+		Amount:      transfer.Amount,
 		Beneficiary: transfer.Beneficiary,
+		BankID:      transfer.BankID,
 	}
 
 	jsonData, err := json.Marshal(baseRequest)

@@ -30,7 +30,7 @@ func (a *Auth) ExchangeToken(
 		return nil, err
 	}
 
-	body, err := request.DapiRequest(jsonData, constants.ExchangeToken, nil)
+	body, err := request.DapiRequest(jsonData, constants.DAPI_URL.AUTH_URLS.EXCHANGE_TOKEN, nil)
 	if err != nil {
 		return nil, err
 	}

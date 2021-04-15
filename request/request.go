@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/dapi-co/dapi-go/constants"
 	"github.com/dapi-co/dapi-go/response"
 )
 
@@ -58,9 +59,9 @@ type TransferRequest struct {
 // transfer autoflow endpoint.
 type TransferAutoflowRequest struct {
 	BaseRequest
-	SenderID      string  `json:"senderID"`
-	Amount        float64 `json:"amount"`
-	Remark        string  `json:"remark,omitempty"`
+	SenderID    string  `json:"senderID"`
+	Amount      float64 `json:"amount"`
+	Remark      string  `json:"remark,omitempty"`
 	Beneficiary BeneficiaryInfo
 }
 
@@ -97,13 +98,17 @@ func DapiRequest(body []byte, url string, header http.Header) ([]byte, error) {
 		return nil, err
 	}
 
+	url = constants.DAPI_URL.BASE_URL + url
+
 	request, err := http.NewRequest("POST", url, bytes.NewBuffer(body))
 
 	if err != nil {
 		return nil, err
 	}
 
-	request.Header = header
+	if header != nil {
+		request.Header = header
+	}
 
 	request.Header.Set("Content-Type", "application/json")
 
@@ -122,9 +127,13 @@ func DapiRequest(body []byte, url string, header http.Header) ([]byte, error) {
 	return respBody, nil
 }
 
-func GetHTTPHeader(header *BaseHeader)http.Header{
-	var httpHeader http.Header
-	httpHeader.Add("Authorization", header.AccessToken)
+func GetHTTPHeader(header *BaseHeader) http.Header {
+	httpHeader := http.Header{}
+	authHeader := ""
+	if header.AccessToken != "" {
+		authHeader = "Bearer " + header.AccessToken
+	}
+	httpHeader.Add("Authorization", authHeader)
 
 	return httpHeader
 }

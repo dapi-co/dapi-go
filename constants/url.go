@@ -15,7 +15,7 @@ type paymentEndpoints struct {
 	GET_BENEFICIARIES  string
 	CREATE_BENEFICIARY string
 	CREATE_TRANSFER    string
-	TRANSFER_AUTOFLOW string
+	TRANSFER_AUTOFLOW  string
 }
 
 type authEndpoints struct {
@@ -40,7 +40,7 @@ const DD_URL = "https://dd.dapi.co"
 
 // DAPI_URL is the base var that holds all supported API endpoints
 var DAPI_URL = &dapiEndpoints{
-	BASE_URL: "http://localhost:9191/v2",
+	BASE_URL: "https://api.dapi.co/v2",
 	DATA_URLS: dataEndpoints{
 		GET_IDENTITY:     "/data/identity/get",
 		GET_ACCOUNTS:     "/data/accounts/get",
@@ -54,7 +54,7 @@ var DAPI_URL = &dapiEndpoints{
 		GET_BENEFICIARIES:  "/payment/beneficiaries/get",
 		CREATE_BENEFICIARY: "/payment/beneficiaries/create",
 		CREATE_TRANSFER:    "/payment/transfer/create",
-		TRANSFER_AUTOFLOW:    "/payment/transfer/autoflow",
+		TRANSFER_AUTOFLOW:  "/payment/transfer/autoflow",
 	},
 	AUTH_URLS: authEndpoints{
 		DELINK_USER:    "/users/delinkuser",

@@ -55,6 +55,8 @@ func (br *BaseResponse) GetCode() int {
 type ExchangeTokenResponse struct {
 	BaseResponse
 	AccessToken string `json:"accessToken,omitempty"`
+	TokenID     string `json:"tokenID,omitempty"`
+	UserID      string `json:"userID,omitempty"`
 }
 
 type IdentityResponse struct {

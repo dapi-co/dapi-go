@@ -518,7 +518,7 @@ func (*Payment) TransferAutoflow(accessToken string, userSecret string, transfer
 | **Beneficiary** <br> _REQUIRED_ | `request.BeneficiaryInfo` | An object that holds the info about the beneficiary which the money should be sent to. |
 | **BankID** <br> _REQUIRED_ | `string` | The bankID of the user which is initiating this transfer. |
 
-###### TransferAutoflow Object
+###### request.BeneficiaryInfo Object
 
 | Parameter | Type | Description |
 |---|---|---|

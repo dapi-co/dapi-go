@@ -2,12 +2,11 @@ package app
 
 import (
 	"encoding/json"
-	"github.com/dapi-co/dapi-go/config"
-	"github.com/dapi-co/dapi-go/constants"
-	"github.com/dapi-co/dapi-go/request"
 	"io/ioutil"
-	"log"
 	"net/http"
+
+	"github.com/dapi-co/dapi-go/config"
+	"github.com/dapi-co/dapi-go/request"
 )
 
 type DapiApp struct {
@@ -44,9 +43,8 @@ func (app *DapiApp) HandleSDKDapiRequests(rw http.ResponseWriter, req *http.Requ
 	}
 
 	// forward the request to be handled
-	resp, err := request.DapiRequest(body, constants.DD_URL, req.Header)
+	resp, err := request.DapiSDKRequest(body, req.Header)
 	if err != nil {
-		log.Printf("an error happened while handling the request. err: %v\n", err)
 		rw.WriteHeader(http.StatusInternalServerError)
 		rw.Write([]byte(`{"success":false,"msg":"Oops! Something happened while performing the request.","type":"UNKNOWN_ERROR","status":"failed"}`))
 		return

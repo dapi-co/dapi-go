@@ -2,7 +2,6 @@ package request
 
 import (
 	"bytes"
-	"encoding/json"
 	"io/ioutil"
 	"net/http"
 
@@ -83,26 +82,12 @@ type BaseHeader struct {
 // DapiRequest creates a request to the API, on the product specified by productURL,
 // with the body of the request set as the provided body, and the headers as the
 // provided headers.
-func DapiRequest(body []byte, url string, header http.Header) ([]byte, error) {
+func DapiRequest(body []byte, action string, header http.Header) ([]byte, error) {
 	client := http.Client{}
 
-	// unmarshal the body to a map, to add the action to it
-	bodyMap := make(map[string]interface{})
-	err := json.Unmarshal(body, &bodyMap)
-	if err != nil {
-		return nil, err
-	}
-
-	// marshal the new body back to json
-	body, err = json.Marshal(bodyMap)
-	if err != nil {
-		return nil, err
-	}
-
-	url = constants.DAPI_URL.BASE_URL + url
+	url := constants.DAPI_URL.BASE_URL + action
 
 	request, err := http.NewRequest("POST", url, bytes.NewBuffer(body))
-
 	if err != nil {
 		return nil, err
 	}
@@ -112,6 +97,39 @@ func DapiRequest(body []byte, url string, header http.Header) ([]byte, error) {
 	}
 
 	request.Header.Set("Content-Type", "application/json")
+
+	resp, err := client.Do(request)
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	respBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	return respBody, nil
+}
+
+// DapiSDKRequest forwards the passed body and header to Dapi's DD url, and
+// return the response body and nil, if no errors happened, otherwise it returns
+// nil and the error happened.
+func DapiSDKRequest(body []byte, header http.Header) ([]byte, error) {
+	client := http.Client{}
+
+	request, err := http.NewRequest("POST", constants.DD_URL, bytes.NewBuffer(body))
+	if err != nil {
+		return nil, err
+	}
+
+	if header != nil {
+		request.Header = header
+	}
+
+	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set("Host", "dd.dapi.co")
 
 	resp, err := client.Do(request)
 	if err != nil {

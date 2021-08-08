@@ -27,6 +27,7 @@ type CreateTransfer struct {
 type Transfer struct {
 	SenderID string
 	Amount   float64
+	Remark   string
 }
 
 // TransferAutoflow represents the transfer to be created
@@ -94,6 +95,7 @@ func (p *Payment) CreateTransfer(
 		SenderID:      transfer.SenderID,
 		ReceiverID:    transfer.ReceiverID,
 		Amount:        transfer.Amount,
+		Remark:        transfer.Remark,
 		Iban:          transfer.Iban,
 		AccountNumber: transfer.AccountNumber,
 		Name:          transfer.Name,
@@ -184,6 +186,7 @@ func (p *Payment) TransferAutoflow(
 		},
 		SenderID:    transfer.SenderID,
 		Amount:      transfer.Amount,
+		Remark:      transfer.Remark,
 		Beneficiary: transfer.Beneficiary,
 		BankID:      transfer.BankID,
 	}

@@ -129,7 +129,7 @@ func DapiSDKRequest(body []byte, header http.Header) ([]byte, error) {
 	}
 
 	request.Header.Set("Content-Type", "application/json")
-	request.Header.Set("Host", "dd.dapi.co")
+	request.Header.Set("Host", "dd.dapi.com")
 
 	resp, err := client.Do(request)
 	if err != nil {

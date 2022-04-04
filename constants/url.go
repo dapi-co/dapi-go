@@ -36,11 +36,11 @@ type dapiEndpoints struct {
 	OPERATION_URLS operationEndpoints
 }
 
-const DD_URL = "https://dd.dapi.co"
+const DD_URL = "https://dd.dapi.com"
 
 // DAPI_URL is the base var that holds all supported API endpoints
 var DAPI_URL = &dapiEndpoints{
-	BASE_URL: "https://api.dapi.co/v2",
+	BASE_URL: "https://api.dapi.com/v2",
 	DATA_URLS: dataEndpoints{
 		GET_IDENTITY:     "/data/identity/get",
 		GET_ACCOUNTS:     "/data/accounts/get",

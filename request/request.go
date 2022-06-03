@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"github.com/dapi-co/dapi-go/actions"
 	"github.com/dapi-co/dapi-go/types"
@@ -27,7 +28,7 @@ type BaseRequest struct {
 // with the body of the request set as the provided body, and the headers as the
 // provided headers.
 func DapiRequest(body []byte, action actions.DapiAction) ([]byte, error) {
-	client := http.Client{}
+	client := http.Client{Timeout: 5 * time.Minute}
 
 	// unmarshal the body to a map, to add the action to it
 	bodyMap := make(map[string]interface{})

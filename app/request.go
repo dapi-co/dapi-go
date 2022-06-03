@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"github.com/dapi-co/dapi-go/request"
 )
 
 func handleDapiRequest(body []byte, header http.Header) ([]byte, error) {
-	client := http.Client{}
+	client := http.Client{Timeout: 5 * time.Minute}
 
 	// create the request with the provided body
 	req, err := http.NewRequest("POST", request.BaseURL, bytes.NewBuffer(body))

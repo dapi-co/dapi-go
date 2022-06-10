@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"github.com/dapi-co/dapi-go/constants"
 	"github.com/dapi-co/dapi-go/response"
@@ -83,7 +84,7 @@ type BaseHeader struct {
 // with the body of the request set as the provided body, and the headers as the
 // provided headers.
 func DapiRequest(body []byte, action string, header http.Header) ([]byte, error) {
-	client := http.Client{}
+	client := http.Client{Timeout: 5 * time.Minute}
 
 	url := constants.DAPI_URL.BASE_URL + action
 
@@ -117,7 +118,7 @@ func DapiRequest(body []byte, action string, header http.Header) ([]byte, error)
 // return the response body and nil, if no errors happened, otherwise it returns
 // nil and the error happened.
 func DapiSDKRequest(body []byte, header http.Header) ([]byte, error) {
-	client := http.Client{}
+	client := http.Client{Timeout: 5 * time.Minute}
 
 	request, err := http.NewRequest("POST", constants.DD_URL, bytes.NewBuffer(body))
 	if err != nil {

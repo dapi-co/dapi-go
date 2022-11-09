@@ -185,3 +185,109 @@ func (d *Data) GetTransactions(
 
 	return &res, nil
 }
+
+// GetCategorizedTransactions talks to the get categorized transactions endpoint
+func (d *Data) GetCategorizedTransactions(
+	accessToken string,
+	userSecret string,
+	accountID string,
+	fromDate time.Time,
+	toDate time.Time,
+	userInputs []response.UserInput,
+	operationID string,
+) (*response.CategorizedTransactionsResponse, error) {
+
+	dateFormat := "2006-01-02"
+
+	transactionsRequest := &request.TransactionsRequest{
+		BaseRequest: request.BaseRequest{
+			UserSecret:  userSecret,
+			AppSecret:   d.Config.AppSecret,
+			UserInputs:  userInputs,
+			OperationID: operationID,
+		},
+		AccountID: accountID,
+		FromDate:  fromDate.Format(dateFormat),
+		ToDate:    toDate.Format(dateFormat),
+	}
+
+	jsonData, err := json.Marshal(transactionsRequest)
+	if err != nil {
+		return nil, err
+	}
+
+	baseHeader := &request.BaseHeader{
+		AccessToken: accessToken,
+	}
+
+	body, err := request.DapiRequest(
+		jsonData,
+		constants.DAPI_URL.DATA_URLS.GET_CATEGORIZED_TRANSACTIONS,
+		request.GetHTTPHeader(baseHeader),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	res := response.CategorizedTransactionsResponse{}
+
+	err = json.Unmarshal(body, &res)
+	if err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+// GetEnrichedTransactions talks to the get enriched transactions endpoint
+func (d *Data) GetEnrichedTransactions(
+	accessToken string,
+	userSecret string,
+	accountID string,
+	fromDate time.Time,
+	toDate time.Time,
+	userInputs []response.UserInput,
+	operationID string,
+) (*response.EnrichedTransactionsResponse, error) {
+
+	dateFormat := "2006-01-02"
+
+	transactionsRequest := &request.TransactionsRequest{
+		BaseRequest: request.BaseRequest{
+			UserSecret:  userSecret,
+			AppSecret:   d.Config.AppSecret,
+			UserInputs:  userInputs,
+			OperationID: operationID,
+		},
+		AccountID: accountID,
+		FromDate:  fromDate.Format(dateFormat),
+		ToDate:    toDate.Format(dateFormat),
+	}
+
+	jsonData, err := json.Marshal(transactionsRequest)
+	if err != nil {
+		return nil, err
+	}
+
+	baseHeader := &request.BaseHeader{
+		AccessToken: accessToken,
+	}
+
+	body, err := request.DapiRequest(
+		jsonData,
+		constants.DAPI_URL.DATA_URLS.GET_ENRICHED_TRANSACTIONS,
+		request.GetHTTPHeader(baseHeader),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	res := response.EnrichedTransactionsResponse{}
+
+	err = json.Unmarshal(body, &res)
+	if err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}

@@ -1,10 +1,12 @@
 package constants
 
 type dataEndpoints struct {
-	GET_IDENTITY     string
-	GET_ACCOUNTS     string
-	GET_BALANCE      string
-	GET_TRANSACTIONS string
+	GET_IDENTITY                 string
+	GET_ACCOUNTS                 string
+	GET_BALANCE                  string
+	GET_TRANSACTIONS             string
+	GET_CATEGORIZED_TRANSACTIONS string
+	GET_ENRICHED_TRANSACTIONS    string
 }
 
 type metadataEndpoints struct {
@@ -42,10 +44,12 @@ const DD_URL = "https://dd.dapi.com"
 var DAPI_URL = &dapiEndpoints{
 	BASE_URL: "https://api.dapi.com/v2",
 	DATA_URLS: dataEndpoints{
-		GET_IDENTITY:     "/data/identity/get",
-		GET_ACCOUNTS:     "/data/accounts/get",
-		GET_BALANCE:      "/data/balance/get",
-		GET_TRANSACTIONS: "/data/transactions/get",
+		GET_IDENTITY:                 "/data/identity/get",
+		GET_ACCOUNTS:                 "/data/accounts/get",
+		GET_BALANCE:                  "/data/balance/get",
+		GET_TRANSACTIONS:             "/data/transactions/get",
+		GET_CATEGORIZED_TRANSACTIONS: "/data/categorizedTransactions/get",
+		GET_ENRICHED_TRANSACTIONS:    "/data/enrichedTransactions/get",
 	},
 	METADATA_URLS: metadataEndpoints{
 		GET_ACCOUNTS: "/metadata/accounts/get",

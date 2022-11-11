@@ -83,6 +83,7 @@ type CategorizedTransactionsResponse struct {
 	BaseResponse
 	Transactions []CategorizedTransaction `json:"transactions,omitempty"`
 }
+
 type EnrichedTransactionsResponse struct {
 	BaseResponse
 	Transactions []EnrichedTransaction `json:"transactions,omitempty"`

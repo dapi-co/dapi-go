@@ -10,6 +10,5 @@ type CategorizedTransaction struct {
 	BeforeAmount float64         `json:"beforeAmount,omitempty"`
 	AfterAmount  float64         `json:"afterAmount,omitempty"`
 	Reference    string          `json:"reference,omitempty"`
-	BrandDetails BrandDetails    `json:"brandDetails,omitempty"`
 	Category     string          `json:"category,omitempty"`
 }

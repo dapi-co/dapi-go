@@ -9,7 +9,7 @@ import (
 	"github.com/dapi-co/dapi-go/response"
 )
 
-// Payment is the base type that allows talking to the payment endpoints
+// Ach is the base type that allows talking to the ach endpoints
 type Ach struct {
 	Config *config.Config
 }

@@ -74,7 +74,7 @@ type BeneficiaryRequest struct {
 }
 
 // AchPullRequest holds the fields that's needed by the ACH's
-// transfer autoflow endpoint.
+// create pull endpoint.
 type AchPullRequest struct {
 	BaseRequest
 	Transfer AchPullTransferInfo `json:"transfer"`

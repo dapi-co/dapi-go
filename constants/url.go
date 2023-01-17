@@ -29,6 +29,10 @@ type operationEndpoints struct {
 	OPERATION_STATUS string
 }
 
+type achEndpoints struct {
+	CREATE_PULL string
+}
+
 type dapiEndpoints struct {
 	BASE_URL       string
 	DATA_URLS      dataEndpoints
@@ -36,6 +40,7 @@ type dapiEndpoints struct {
 	PAYMENT_URLS   paymentEndpoints
 	AUTH_URLS      authEndpoints
 	OPERATION_URLS operationEndpoints
+	ACH_URLS       achEndpoints
 }
 
 const DD_URL = "https://dd.dapi.com"
@@ -67,5 +72,8 @@ var DAPI_URL = &dapiEndpoints{
 
 	OPERATION_URLS: operationEndpoints{
 		OPERATION_STATUS: "/operation/status",
+	},
+	ACH_URLS: achEndpoints{
+		CREATE_PULL: "/ach/pull/create",
 	},
 }

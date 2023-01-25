@@ -15,9 +15,9 @@ type IBaseResponse interface {
 }
 
 type BaseResponse struct {
-	OperationID string              `json:"operationID,omitempty"`
-	Success     bool                `json:"success,omitempty"`
-	Status      constants.ApiStatus `json:"status,omitempty"`
+	OperationID string              `json:"operationID"`
+	Success     bool                `json:"success"`
+	Status      constants.ApiStatus `json:"status"`
 	UserInputs  []UserInput         `json:"userInputs,omitempty"`
 	Type        string              `json:"type,omitempty"`
 	Msg         string              `json:"msg,omitempty"`

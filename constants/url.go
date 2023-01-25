@@ -31,6 +31,7 @@ type operationEndpoints struct {
 
 type achEndpoints struct {
 	CREATE_PULL string
+	GET_PULL    string
 }
 
 type dapiEndpoints struct {
@@ -75,5 +76,6 @@ var DAPI_URL = &dapiEndpoints{
 	},
 	ACH_URLS: achEndpoints{
 		CREATE_PULL: "/ach/pull/create",
+		GET_PULL:    "/ach/pull/get",
 	},
 }

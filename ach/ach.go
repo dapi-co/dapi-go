@@ -61,3 +61,41 @@ func (a *Ach) CreatePull(
 
 	return &res, nil
 }
+
+func (a *Ach) GetPull(
+	accessToken string,
+	userSecret string,
+	userInputs []response.UserInput,
+	operationID string,
+) (*response.GetAchPullResponse, error) {
+
+	baseRequest := &request.BaseRequest{
+		UserSecret:  userSecret,
+		AppSecret:   a.Config.AppSecret,
+		UserInputs:  userInputs,
+		OperationID: operationID,
+	}
+
+	jsonData, err := json.Marshal(baseRequest)
+	if err != nil {
+		return nil, err
+	}
+
+	baseHeader := &request.BaseHeader{
+		AccessToken: accessToken,
+	}
+
+	body, err := request.DapiRequest(jsonData, constants.DAPI_URL.ACH_URLS.GET_PULL, request.GetHTTPHeader(baseHeader))
+	if err != nil {
+		return nil, err
+	}
+
+	res := response.GetAchPullResponse{}
+
+	err = json.Unmarshal(body, &res)
+	if err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}

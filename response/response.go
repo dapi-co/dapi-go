@@ -106,5 +106,5 @@ type AccountsMetadataResponse struct {
 
 type GetAchPullResponse struct {
 	BaseResponse
-	Transfer *GetAchPull `json:"transfer,omitempty"`
+	Transfer *ACHPull `json:"transfer,omitempty"`
 }

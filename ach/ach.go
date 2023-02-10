@@ -9,18 +9,18 @@ import (
 	"github.com/dapi-co/dapi-go/response"
 )
 
-// Ach is the base type that allows talking to the ach endpoints
-type Ach struct {
+// ACH is the base type that allows talking to the ach endpoints
+type ACH struct {
 	Config *config.Config
 }
 
 // CreatePull represents the pull transfer to be created
 type CreatePull struct {
-	Transfer request.AchPullTransferInfo
+	Transfer request.ACHPullTransfer
 }
 
 // CreatePull talks to the create pull endpoint
-func (a *Ach) CreatePull(
+func (a *ACH) CreatePull(
 	accessToken string,
 	userSecret string,
 	pullTransfer CreatePull,
@@ -28,7 +28,7 @@ func (a *Ach) CreatePull(
 	operationID string,
 ) (*response.BaseResponse, error) {
 
-	baseRequest := &request.AchPullRequest{
+	baseRequest := &request.CreateACHPullRequest{
 		BaseRequest: request.BaseRequest{
 			UserSecret:  userSecret,
 			AppSecret:   a.Config.AppSecret,
@@ -62,12 +62,12 @@ func (a *Ach) CreatePull(
 	return &res, nil
 }
 
-func (a *Ach) GetPull(
+func (a *ACH) GetPull(
 	accessToken string,
 	userSecret string,
 	userInputs []response.UserInput,
 	operationID string,
-) (*response.GetAchPullResponse, error) {
+) (*response.GetACHPullResponse, error) {
 
 	baseRequest := &request.BaseRequest{
 		UserSecret:  userSecret,
@@ -90,7 +90,7 @@ func (a *Ach) GetPull(
 		return nil, err
 	}
 
-	res := response.GetAchPullResponse{}
+	res := response.GetACHPullResponse{}
 
 	err = json.Unmarshal(body, &res)
 	if err != nil {

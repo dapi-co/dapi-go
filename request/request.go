@@ -73,11 +73,11 @@ type BeneficiaryRequest struct {
 	CreateBeneficiaryInfo
 }
 
-// AchPullRequest holds the fields that's needed by the ACH's
+// CreateACHPullRequest holds the fields that's needed by the ACH's
 // create pull endpoint.
-type AchPullRequest struct {
+type CreateACHPullRequest struct {
 	BaseRequest
-	Transfer AchPullTransferInfo `json:"transfer"`
+	Transfer ACHPullTransfer `json:"transfer"`
 }
 
 type NoHeader struct{}

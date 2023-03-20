@@ -98,7 +98,8 @@ func DapiRequest(body []byte, action string, header http.Header) ([]byte, error)
 	}
 
 	request.Header.Set("Content-Type", "application/json")
-	request.Header = AddExtraHeaders(request.Header)
+	request.Header.Add("X-Dapi-Library-Version", goExtraHeaders.LibraryVersion)
+	request.Header.Add("X-Dapi-Library", goExtraHeaders.LibraryPlatform)
 
 	resp, err := client.Do(request)
 	if err != nil {
@@ -132,7 +133,8 @@ func DapiSDKRequest(body []byte, header http.Header) ([]byte, error) {
 
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("Host", "dd.dapi.com")
-	request.Header = AddExtraHeaders(request.Header)
+	request.Header.Add("X-Dapi-Library-Version", goExtraHeaders.LibraryVersion)
+	request.Header.Add("X-Dapi-Library", goExtraHeaders.LibraryPlatform)
 
 	resp, err := client.Do(request)
 	if err != nil {
@@ -158,10 +160,4 @@ func GetHTTPHeader(header *BaseHeader) http.Header {
 	httpHeader.Add("Authorization", authHeader)
 
 	return httpHeader
-}
-
-func AddExtraHeaders(header http.Header) http.Header {
-	header.Add("LibraryVersion", constants.GoExtraHeaders.LibraryVersion)
-	header.Add("LibraryPlatform", constants.GoExtraHeaders.LibraryPlatform)
-	return header
 }

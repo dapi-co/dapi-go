@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/dapi-co/dapi-go/app"
-	"github.com/dapi-co/dapi-go/config"
 	"log"
 	"net/http"
+
+	"github.com/dapi-co/dapi-go/app"
+	"github.com/dapi-co/dapi-go/config"
 )
 
 func main() {

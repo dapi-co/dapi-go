@@ -98,8 +98,8 @@ func DapiRequest(body []byte, action string, header http.Header) ([]byte, error)
 	}
 
 	request.Header.Set("Content-Type", "application/json")
-	request.Header.Add("X-Dapi-Library-Version", goExtraHeaders.LibraryVersion)
-	request.Header.Add("X-Dapi-Library", goExtraHeaders.LibraryPlatform)
+	request.Header.Set("X-Dapi-Library-Version", goExtraHeaders.LibraryVersion)
+	request.Header.Set("X-Dapi-Library", goExtraHeaders.LibraryPlatform)
 
 	resp, err := client.Do(request)
 	if err != nil {
@@ -133,8 +133,8 @@ func DapiSDKRequest(body []byte, header http.Header) ([]byte, error) {
 
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("Host", "dd.dapi.com")
-	request.Header.Add("X-Dapi-Library-Version", goExtraHeaders.LibraryVersion)
-	request.Header.Add("X-Dapi-Library", goExtraHeaders.LibraryPlatform)
+	request.Header.Set("X-Dapi-Library-Version", goExtraHeaders.LibraryVersion)
+	request.Header.Set("X-Dapi-Library", goExtraHeaders.LibraryPlatform)
 
 	resp, err := client.Do(request)
 	if err != nil {
